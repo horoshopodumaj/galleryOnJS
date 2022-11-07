@@ -10,8 +10,12 @@ class Gallery {
 
         this.manageHTML = this.manageHTML.bind(this);
         this.setParameters = this.setParameters.bind(this);
+        this.setEvents = this.setEvents.bind(this);
+        this.resizeGallery = this.resizeGallery.bind(this);
+
         this.manageHTML();
         this.setParameters();
+        this.setEvents();
     }
 
     manageHTML() {
@@ -39,6 +43,19 @@ class Gallery {
             slideNode.style.width = `${this.width}px`;
         });
     }
+
+    setEvents() {
+        this.debouncedResizeGallery = debounce(this.resizeGallery);
+        window.addEventListener("resize", this.debouncedResizeGallery);
+    }
+
+    destroyEvents() {
+        window.removeEventListener("resize", this.debouncedResizeGallery);
+    }
+
+    resizeGallery() {
+        this.setParameters();
+    }
 }
 
 function wrapElementByDiv({ element, className }) {
@@ -49,4 +66,12 @@ function wrapElementByDiv({ element, className }) {
     wrapperNode.appendChild(element);
 
     return wrapperNode;
+}
+
+function debounce(func, time = 100) {
+    let timer;
+    return function (event) {
+        clearTimeout(timer);
+        timer = setTimeout(func, time, event);
+    };
 }
