@@ -69,6 +69,7 @@ class Gallery {
         this.currentSlideWasChanged = false;
         this.clickX = evt.pageX;
         this.startX = this.x;
+        this.resetStyleTransition();
         window.addEventListener("pointermove", this.dragging);
     }
 
@@ -76,6 +77,7 @@ class Gallery {
         window.removeEventListener("pointermove", this.dragging);
         this.x = -this.currentSlide * this.width;
         this.setStylePosition();
+        this.setStyleTransition();
     }
 
     dragging(evt) {
@@ -106,6 +108,14 @@ class Gallery {
 
     setStylePosition() {
         this.lineNode.style.transform = `translate3d(${this.x}px,0,0)`;
+    }
+
+    setStyleTransition() {
+        this.lineNode.style.transition = `all 0.25s ease 0s`;
+    }
+
+    resetStyleTransition() {
+        this.lineNode.style.transition = `all 0s ease 0s`;
     }
 }
 
