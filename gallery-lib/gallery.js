@@ -9,7 +9,9 @@ class Gallery {
         this.currentSlide = 0;
 
         this.manageHTML = this.manageHTML.bind(this);
+        this.setParameters = this.setParameters.bind(this);
         this.manageHTML();
+        this.setParameters();
     }
 
     manageHTML() {
@@ -26,6 +28,16 @@ class Gallery {
                 className: GallerySlideClassName,
             })
         );
+    }
+
+    setParameters() {
+        const coordsContainer = this.containerNode.getBoundingClientRect();
+        this.width = coordsContainer.width;
+
+        this.lineNode.style.width = `${this.size * this.width}px`;
+        Array.from(this.slideNodes).forEach((slideNode) => {
+            slideNode.style.width = `${this.width}px`;
+        });
     }
 }
 
