@@ -27,6 +27,10 @@ class Gallery {
         this.stopDrag = this.stopDrag.bind(this);
         this.dragging = this.dragging.bind(this);
         this.setStylePosition = this.setStylePosition.bind(this);
+        this.clickDots = this.clickDots.bind(this);
+        this.moveToLeft = this.moveToLeft.bind(this);
+        this.moveToRight = this.moveToRight.bind(this);
+        this.changeCurrentSlide = this.changeCurrentSlide.bind(this);
 
         this.manageHTML();
         this.setParameters();
@@ -63,6 +67,11 @@ class Gallery {
                     }"></button>`
             )
             .join("");
+
+        this.dotNodes = this.dotsNode.querySelectorAll(`.${GalleryDotClassName}`);
+
+        this.navLeft = this.containerNode.querySelector(`.${GalleryNavLeftClassName}`);
+        this.navRight = this.containerNode.querySelector(`.${GalleryNavRightClassName}`);
     }
 
     setParameters() {
@@ -86,6 +95,10 @@ class Gallery {
         this.lineNode.addEventListener("pointerdown", this.startDrag);
         window.addEventListener("pointerup", this.stopDrag);
         window.addEventListener("pointercancel", this.stopDrag);
+
+        this.dotsNode.addEventListener("click", this.clickDots);
+        this.navLeft.addEventListener("click", this.moveToLeft);
+        this.navRight.addEventListener("click", this.moveToRight);
     }
 
     destroyEvents() {
@@ -93,6 +106,10 @@ class Gallery {
         this.lineNode.removeEventListener("pointerdown", this.startDrag);
         window.removeEventListener("pointerup", this.stopDrag);
         window.removeEventListener("pointercancel", this.stopDrag);
+
+        this.dotsNode.removeEventListener("click", this.clickDots);
+        this.navLeft.removeEventListener("click", this.moveToLeft);
+        this.navRight.removeEventListener("click", this.moveToRight);
     }
 
     resizeGallery() {
@@ -113,9 +130,8 @@ class Gallery {
         window.removeEventListener("pointermove", this.dragging);
 
         this.containerNode.classList.remove(GalleryDraggableClassName);
-        this.x = -this.currentSlide * (this.width + this.settings.margin);
-        this.setStylePosition();
-        this.setStyleTransition();
+
+        this.changeCurrentSlide();
     }
 
     dragging(evt) {
@@ -143,6 +159,32 @@ class Gallery {
             this.currentSlideWasChanged = true;
             this.currentSlide = this.currentSlide + 1;
         }
+    }
+
+    clickDots() {}
+
+    moveToLeft() {
+        if (this.currentSlide <= 0) {
+            return;
+        }
+
+        this.currentSlide = this.currentSlide - 1;
+        this.changeCurrentSlide();
+    }
+
+    moveToRight() {
+        if (this.currentSlide >= this.size - 1) {
+            return;
+        }
+
+        this.currentSlide = this.currentSlide + 1;
+        this.changeCurrentSlide();
+    }
+
+    changeCurrentSlide() {
+        this.x = -this.currentSlide * (this.width + this.settings.margin);
+        this.setStylePosition();
+        this.setStyleTransition();
     }
 
     setStylePosition() {
