@@ -8,14 +8,11 @@
 
 .gallery-line-container {
     overflow: hidden;
+    touch-action: none;
 }
 
 .gallery-draggable {
     cursor: grabbing;
-}
-
-.gallery-line {
-    overflow: hidden;
 }
 
 .gallery-slide {
