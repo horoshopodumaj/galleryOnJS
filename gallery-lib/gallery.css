@@ -8,7 +8,7 @@
 
 .gallery-line-container {
     overflow: hidden;
-    touch-action: pan-up pan-down;
+    touch-action: pan-y;
 }
 
 .gallery-draggable {
