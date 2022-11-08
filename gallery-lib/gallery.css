@@ -1,8 +1,10 @@
 .gallery {
+    position: relative;
     width: 100%;
     overflow: hidden;
     user-select: none;
     -webkit-user-select: none;
+    /* padding: 0 3rem; */
 }
 
 .gallery-draggable {
@@ -17,6 +19,7 @@
     min-height: 1px;
     float: left;
     transform: translateZ(0);
+    overflow: hidden;
 }
 
 .gallery-dots {
@@ -48,7 +51,43 @@
     padding: 1rem 0 0;
 }
 
-.gallery-nav button {
-    margin: 0.5rem;
+.gallery-nav-left,
+.gallery-nav-right {
+    text-indent: -1234rem;
+    position: absolute;
+    top: 50%;
+    width: 2rem;
+    height: 3rem;
+    border: none;
+    outline: none;
+    margin-top: -4rem;
     cursor: pointer;
+    transition: all 0.3s;
+}
+
+.gallery-nav-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.gallery-nav-left {
+    background: url("./img/left.svg") no-repeat center;
+    background-size: contain;
+    left: 0;
+}
+
+.gallery-nav-right {
+    background: url("./img/right.svg") no-repeat center;
+    background-size: contain;
+    right: 0;
+}
+
+@media screen and (max-width: 700px) {
+    .gallery {
+        padding: 0;
+    }
+
+    .gallery-nav {
+        display: none;
+    }
 }

@@ -4,6 +4,10 @@ body {
     max-width: 900px;
 }
 
+img {
+    pointer-events: none;
+}
+
 .slide {
     height: 20rem;
     display: flex;

@@ -1,6 +1,7 @@
 const GalleryClassName = "gallery";
 const GalleryDraggableClassName = "gallery-draggable";
 const GalleryLineClassName = "gallery-line";
+const GalleryLineContainerClassName = "gallery-line-container";
 const GallerySlideClassName = "gallery-slide";
 const GalleryDotsClassName = "gallery-dots";
 const GalleryDotClassName = "gallery-dot";
@@ -8,6 +9,7 @@ const GalleryDotActiveClassName = "gallery-dot-active";
 const GalleryNavClassName = "gallery-nav";
 const GalleryNavLeftClassName = "gallery-nav-left";
 const GalleryNavRightClassName = "gallery-nav-right";
+const GalleryNavDisabledClassName = "gallery-nav-disabled";
 
 class Gallery {
     constructor(element, options = {}) {
@@ -32,6 +34,7 @@ class Gallery {
         this.moveToRight = this.moveToRight.bind(this);
         this.changeCurrentSlide = this.changeCurrentSlide.bind(this);
         this.changeActiveDotClass = this.changeActiveDotClass.bind(this);
+        this.changeDisabledNav = this.changeDisabledNav.bind(this);
 
         this.manageHTML();
         this.setParameters();
@@ -41,8 +44,10 @@ class Gallery {
     manageHTML() {
         this.containerNode.classList.add(GalleryClassName);
         this.containerNode.innerHTML = `
-            <div class="${GalleryLineClassName}">
-                ${this.containerNode.innerHTML}
+            <div class="${GalleryLineContainerClassName}">
+                <div class="${GalleryLineClassName}">
+                    ${this.containerNode.innerHTML}
+                </div>
             </div>
             <div class='${GalleryNavClassName}'>
                 <button class='${GalleryNavLeftClassName}'>Left</button>
@@ -50,6 +55,10 @@ class Gallery {
             </div>
             <div class='${GalleryDotsClassName}'></div>
         `;
+
+        this.lineContainerNode = this.containerNode.querySelector(
+            `.${GalleryLineContainerClassName}`
+        );
         this.lineNode = this.containerNode.querySelector(`.${GalleryLineClassName}`);
         this.dotsNode = this.containerNode.querySelector(`.${GalleryDotsClassName}`);
 
@@ -76,14 +85,17 @@ class Gallery {
     }
 
     setParameters() {
-        const coordsContainer = this.containerNode.getBoundingClientRect();
-        this.width = coordsContainer.width;
+        const coordsLineContainer = this.lineContainerNode.getBoundingClientRect();
+        this.width = coordsLineContainer.width;
         this.maximumX = -(this.size - 1) * (this.width + this.settings.margin);
         this.x = -this.currentSlide * (this.width + this.settings.margin);
 
         this.resetStyleTransition();
         this.lineNode.style.width = `${this.size * (this.width + this.settings.margin)}px`;
         this.setStylePosition();
+        this.changeActiveDotClass();
+        this.changeDisabledNav();
+
         Array.from(this.slideNodes).forEach((slideNode) => {
             slideNode.style.width = `${this.width}px`;
             slideNode.style.marginRight = `${this.settings.margin}px`;
@@ -209,6 +221,7 @@ class Gallery {
         this.setStyleTransition(countSwipes);
 
         this.changeActiveDotClass();
+        this.changeDisabledNav();
     }
 
     changeActiveDotClass() {
@@ -217,6 +230,19 @@ class Gallery {
         }
 
         this.dotNodes[this.currentSlide].classList.add(GalleryDotActiveClassName);
+    }
+
+    changeDisabledNav() {
+        if (this.currentSlide <= 0) {
+            this.navLeft.classList.add(GalleryNavDisabledClassName);
+        } else {
+            this.navLeft.classList.remove(GalleryNavDisabledClassName);
+        }
+        if (this.currentSlide >= this.size - 1) {
+            this.navRight.classList.add(GalleryNavDisabledClassName);
+        } else {
+            this.navRight.classList.remove(GalleryNavDisabledClassName);
+        }
     }
 
     setStylePosition() {
