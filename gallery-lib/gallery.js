@@ -3,6 +3,7 @@ const GalleryDraggableClassName = "gallery-draggable";
 const GalleryLineClassName = "gallery-line";
 const GallerySlideClassName = "gallery-slide";
 const GalleryDotsClassName = "gallery-dots";
+const GalleryDotClassName = "gallery-dot";
 const GalleryDotActiveClassName = "gallery-dot-active";
 const GalleryNavClassName = "gallery-nav";
 const GalleryNavLeftClassName = "gallery-nav-left";
@@ -45,12 +46,23 @@ class Gallery {
             <div class='${GalleryDotsClassName}'></div>
         `;
         this.lineNode = this.containerNode.querySelector(`.${GalleryLineClassName}`);
+        this.dotsNode = this.containerNode.querySelector(`.${GalleryDotsClassName}`);
+
         this.slideNodes = Array.from(this.lineNode.children).map((childNode) =>
             wrapElementByDiv({
                 element: childNode,
                 className: GallerySlideClassName,
             })
         );
+
+        this.dotsNode.innerHTML = Array.from(Array(this.size).keys())
+            .map(
+                (key) =>
+                    `<button class="${GalleryDotClassName} ${
+                        key === this.currentSlide ? GalleryDotActiveClassName : ""
+                    }"></button>`
+            )
+            .join("");
     }
 
     setParameters() {
