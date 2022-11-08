@@ -31,6 +31,7 @@ class Gallery {
         this.moveToLeft = this.moveToLeft.bind(this);
         this.moveToRight = this.moveToRight.bind(this);
         this.changeCurrentSlide = this.changeCurrentSlide.bind(this);
+        this.changeActiveDotClass = this.changeActiveDotClass.bind(this);
 
         this.manageHTML();
         this.setParameters();
@@ -161,7 +162,27 @@ class Gallery {
         }
     }
 
-    clickDots() {}
+    clickDots(evt) {
+        const dotNode = evt.target.closest("button");
+        if (!dotNode) {
+            return;
+        }
+
+        let dotNumber;
+        for (let i = 0; i < this.dotNodes.length; i++) {
+            if (this.dotNodes[i] === dotNode) {
+                dotNumber = i;
+                break;
+            }
+        }
+
+        if (dotNumber === this.currentSlide) {
+            return;
+        }
+
+        this.currentSlide = dotNumber;
+        this.changeCurrentSlide();
+    }
 
     moveToLeft() {
         if (this.currentSlide <= 0) {
@@ -185,6 +206,16 @@ class Gallery {
         this.x = -this.currentSlide * (this.width + this.settings.margin);
         this.setStylePosition();
         this.setStyleTransition();
+
+        this.changeActiveDotClass();
+    }
+
+    changeActiveDotClass() {
+        for (let i = 0; i < this.dotNodes.length; i++) {
+            this.dotNodes[i].classList.remove(GalleryDotActiveClassName);
+        }
+
+        this.dotNodes[this.currentSlide].classList.add(GalleryDotActiveClassName);
     }
 
     setStylePosition() {
