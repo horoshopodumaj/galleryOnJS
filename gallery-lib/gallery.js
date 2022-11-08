@@ -180,8 +180,9 @@ class Gallery {
             return;
         }
 
+        const countSwipes = Math.abs(this.currentSlide - dotNumber);
         this.currentSlide = dotNumber;
-        this.changeCurrentSlide();
+        this.changeCurrentSlide(countSwipes);
     }
 
     moveToLeft() {
@@ -202,10 +203,10 @@ class Gallery {
         this.changeCurrentSlide();
     }
 
-    changeCurrentSlide() {
+    changeCurrentSlide(countSwipes) {
         this.x = -this.currentSlide * (this.width + this.settings.margin);
         this.setStylePosition();
-        this.setStyleTransition();
+        this.setStyleTransition(countSwipes);
 
         this.changeActiveDotClass();
     }
@@ -222,8 +223,8 @@ class Gallery {
         this.lineNode.style.transform = `translate3d(${this.x}px,0,0)`;
     }
 
-    setStyleTransition() {
-        this.lineNode.style.transition = `all 0.25s ease 0s`;
+    setStyleTransition(countSwipes = 1) {
+        this.lineNode.style.transition = `all ${0.25 * countSwipes}s ease 0s`;
     }
 
     resetStyleTransition() {
